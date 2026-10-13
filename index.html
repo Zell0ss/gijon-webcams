@@ -277,15 +277,15 @@ const CAMS = [
     name: "El Tostaderu",
     where: "Webcams de Asturias",
     page: "https://www.webcamsdeasturias.com/asturias/centro/gijon/gijon/playa-de-san-lorenzo-el-tostaderu-hd/133/",
-    type: "iframe",
-    src: "https://rtsp.me/embed/67Q26etY/"
+    type: "link",
+    src: "https://rtsp.me/embed/67Q26etY/"  /* solo se ve en los dominios autorizados por rtsp.me */
   },
   {
     name: "La Escalerona",
     where: "Webcams de Asturias",
     page: "https://www.webcamsdeasturias.com/asturias/centro/gijon/gijon/la-escalerona-playa-de-san-lorenzo-hd/148/",
-    type: "iframe",
-    src: "https://rtsp.me/embed/akBSN4td/"
+    type: "link",
+    src: "https://rtsp.me/embed/akBSN4td/"  /* solo se ve en los dominios autorizados por rtsp.me */
   }
 ];
 
@@ -325,6 +325,14 @@ function mount(cam, screen) {
   screen.replaceChildren();
   if (cam._timer) { clearInterval(cam._timer); cam._timer = null; }
   if (cam._hls) { cam._hls.destroy(); cam._hls = null; }
+
+  if (cam.type === "link") {
+    screen.append(emptyState(cam, {
+      tag: "Solo en su web",
+      text: "El dueño de esta cámara no deja verla fuera de su página. Ábrela con el botón de abajo."
+    }));
+    return;
+  }
 
   if (!cam.src) {
     screen.append(emptyState(cam, {
